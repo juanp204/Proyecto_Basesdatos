@@ -5,8 +5,31 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link rel="stylesheet" href="./bootstrap.css">
+    <link rel="stylesheet" href="./bootstrap.min.css">
+    <link rel="stylesheet" href="./estilos.css">
 </head>
-<body>
-    
+<body class="m-0 vh-100 row justify-content-center aling-items-center">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+
+    </nav>
+    <div class="iniciar col-auto p-5 text-center">
+        <form action="" method="post">
+            <p>
+                Iniciar Sesión
+            </p>
+            <div>
+                <label class="col-form-label mt-4" for="inputDefault">User Name</label>
+                <input type="text" class="form-control" placeholder="Name" id="inputDefault">
+            </div>
+            <div>
+                <label for="exampleInputPassword1" class="form-label mt-4">Password</label>
+                <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+            </div>
+            <button type="button" class="btn btn-primary btn-inic btn_inic">Iniciar Secion</button>
+            <!--button type="submit" class="btn btn-primary">Submit</button-->
+        </form>
+        <button type="button" class="btn btn-primary btn_inic">Registrarse</button>
+    </div>
 </body>
 </html>
