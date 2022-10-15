@@ -1,6 +1,6 @@
 const express = require('express');
 const app = express();
-//const path = require('path');
+const path = require('path');
 
 app.use(express.urlencoded({extended:false}));
 app.use(express.json());
@@ -23,15 +23,15 @@ app.use(session({
 }));
 
 //DB
-//const conectado = require('./database/db');
-//const req = require('express/lib/request');
+const conectado = require('./database/db');
+const req = require('express/lib/request');
 
 //rutas
-app.use(require('./routes/index.js'));
+app.use(require('./routes/routes.js'));
 
 //recursos
-//app.use('/recursos', express.static('recursos'));
-//app.use('/recursos', express.static(path.join(__dirname,'/recursos')));
+app.use('/multimedia', express.static('multimedia'));
+app.use('/multimedia', express.static(path.join(__dirname,'/multimedia')));
 
 
 //server
