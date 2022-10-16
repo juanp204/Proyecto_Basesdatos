@@ -11,8 +11,8 @@ dotenv.config({path:path.join(__dirname,'/env/.env')})
 
 //configuracion
 app.set('port', 80);
-//app.engine('html', require('ejs').renderFile);
-//app.set('view engine', 'ejs');
+app.engine('html', require('ejs').renderFile);
+app.set('view engine', 'ejs');
 
 //var.session
 const session = require('express-session')
@@ -30,8 +30,8 @@ const req = require('express/lib/request');
 app.use(require('./routes/routes.js'));
 
 //recursos
-app.use('/multimedia', express.static('multimedia'));
-app.use('/multimedia', express.static(path.join(__dirname,'/multimedia')));
+//app.use('/multimedia', express.static('multimedia'));
+//app.use('/multimedia', express.static(path.join(__dirname,'/multimedia')));
 
 
 //server

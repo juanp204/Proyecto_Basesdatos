@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inicio</title>
+    <link rel="stylesheet" href="./bootstrap.css">
+    <link rel="stylesheet" href="./bootstrap.min.css">
+    <link rel="stylesheet" href="./estilos.css">
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+</head>
+<body class="m-0 vh-100 row justify-content-center aling-items-center">
+    <% if(typeof alert != "undefined") { %>
+        <script>
+            Swal.fire({
+                title: `<%= alertTitle %>`,
+                text: `<%= alertMessage %>`,
+                icon: `<%= alertIcon %>`,
+                showConfirmButton: <%= showConfirmButton %>,
+                timer: <%= timer %>
+    
+            })
+        </script>
+        <% } %>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary m-0 vh-5"></nav>
+    <div class="ideas text-center w-50">
+        <div class="p-5 bd-highlight m-o">
+            <div>
+                <h4>
+                    Nombre de proyecto
+                </h4>
+                <p> 
+                    
+                </p>
+            </div>
+            <button type="button" class="btn btn-primary">IR</button>
+        </div>
+
+        <div class="p-2 bd-highlight">
+            <div>
+                <h4>
+                    Nombre de proyecto
+                </h4>
+                <p>
+                    descripcion
+                </p>
+            </div>
+            <button type="button" class="btn btn-primary">IR</button>
+        </div>
+
+        <div class="p-2 bd-highlight">
+            <div>
+                <h4>
+                    Nombre de proyecto
+                </h4>
+                <p>
+                    descripcion
+                </p>
+            </div>
+            <button type="button" class="btn btn-primary">IR</button>
+        </div>
+    </div>
+</body>
+</html>

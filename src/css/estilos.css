@@ -13,5 +13,8 @@
 
 .ideas{
     display: block;
-    width: 25%;
+    margin-left: 25%;
+}
+.pag{
+    margin-left: 30%;
 }
