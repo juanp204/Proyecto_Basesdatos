@@ -21,21 +21,62 @@
           </button>
           <div class="navbar-collapse collapse show" id="navbarColor01" style="">
             <ul class="navbar-nav me-auto">
-              <!--li class="nav-item">
-                <a class="nav-link active" href="#">Home
-                  <span class="visually-hidden">(current)</span>
-                </a>
-              </li-->
-              <li class="nav-item dropdown">
-                <% if(typeof user != undefined) { %>
+                <% if(us == undefined) { %>
+                    <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">User</a>
                     <div class="dropdown-menu">
                     <a class="dropdown-item" href="/init">Iniciar Sesión</a>
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item" href="/registrarse">Registrarse</a>
-                    </div>    
+                    </div>
+                    </li>   
                 <% } %>
-              </li>
+                  <%if(id == 5) { %>
+                    <li class="nav-item">
+                      <a class="nav-link" href="#">Usuarios</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">ADMIN</a>
+                    <div class="dropdown-menu">
+                    <a class="dropdown-item" href="/init">Perfil</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="/cerrar">Cerrar Sesion</a>
+                    </div>
+                  </li>  
+                <% } %>
+                <%if(id == 4) { %>
+                  <li class="nav-item dropdown"></li>
+                  <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">COORDINADORES</a>
+                    <div class="dropdown-menu">
+                    <a class="dropdown-item" href="/init">Perfil</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="/cerrar">Cerrar Sesion</a>
+                    </div>
+                  </li>
+                <% } %>
+                <%if(id == 3) { %>
+                  <li class="nav-item dropdown"></li>
+                  <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"> <%= us %>  </a>
+                    <div class="dropdown-menu">
+                    <a class="dropdown-item" href="/init">Perfil</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="/cerrar">Cerrar Sesion</a>
+                    </div>
+                  </li> 
+                <% } %>
+                <%if(id == 1 | id == 2) { %>
+                  <li class="nav-item dropdown"></li>
+                    <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"><%= us %></a>
+                    <div class="dropdown-menu">
+                    <a class="dropdown-item" href="/init">Perfil</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="/cerrar">Cerrar Sesion</a>
+                    </div>
+                  </li>
+                <% } %>
+              
+              <script>
+              </script>
             </ul>
             <form class="d-flex" action="/" method="">
               <input class="form-control me-sm-2" type="text" placeholder="Search" id="search" name="search">
@@ -97,9 +138,9 @@
             btn.textContent = "IR";
             btn.type = "submit";
             btn.name = "id"
-            btn.value = `${res[i].id}`
-            nombre.textContent = res[i].nombre;
-            des.textContent = res[i].descrip;
+            btn.value = `${res[i].id_iniciativa}`
+            nombre.textContent = res[i].in_nombre;
+            des.textContent = res[i].in_texto;
             inte.textContent = "aqui van los integrantes"
             divhp.appendChild(nombre);
             divhp.appendChild(inte);

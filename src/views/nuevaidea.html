@@ -26,7 +26,8 @@
                 </a>
               </li-->
               <li class="nav-item dropdown">
-                <% if(typeof user != undefined) { %>
+                
+                <% if(typeof nombre != undefined) { %>
                     <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">User</a>
                     <div class="dropdown-menu">
                     <a class="dropdown-item" href="/init">Iniciar Sesión</a>
@@ -43,5 +44,39 @@
           </div>
         </div>
     </nav>
+
+    <div class="ideas w-50 mt-5 mb-5 text-center form-group">
+        <label class="col-form-label mt-4" for="inputDefault">Nombre Proyecto</label>
+        <input type="text" class="form-control" placeholder="Nombre Proyecto" id="nomproy" name="nomproy" required>
+      </div>
+
+    <div class="ideas w-50 mt-5 mb-5">
+        <label class="mb-3" for="">agregar usuario</label>
+        <div class="text-center input-group mb-3 w-75">
+            <input type="text" class="form-control" placeholder="Recipient's username" aria-label="Recipient's username" aria-describedby="button-addon2">
+            <button class="btn btn-primary" type="button" id="button-addon2">Button</button>
+          </div>
+    </div>
+
+    <div class="form-group ideas w-50 mt-5 mb-5 text-center">
+        <label for="exampleTextarea" class="form-label mt-4">Descripcion</label>
+        <textarea class="form-control" id="desc" rows="3" style="height: 100px;" name="desc"></textarea required>
+      </div>
+
+    <div class="form-group ideas w-50 mt-5 mb-5 text-center">
+    <label for="formFile" class="form-label mt-4">PDF del proyecto</label>
+    <input class="form-control" type="file" id="formfile" accept="application/pdf" name="formfile" required>
+    </div>
+
+    <div class="ideas w-50 mt-5 mb-5">
+        <label class="mb-3" for="">Enlace al video</label>
+        <div class="text-center input-group mb-3 w-75">
+            <form action="">
+                <input type="url" class="form-control" placeholder="https://youtu" aria-label="Recipient's username" aria-describedby="button-addon2" id="yout" name="yout" pattern="https://youtu.+">
+                <button class="btn btn-primary" type="submit" id="button-addon2">Button</button>
+            </form>
+          </div>
+    </div>
+    
 </body>
 </html>

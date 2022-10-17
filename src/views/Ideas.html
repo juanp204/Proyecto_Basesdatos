@@ -46,7 +46,7 @@
     </nav>
     <div class="text-center w-75 idea">
         <div>
-            <h2 id="nom_equip">Nombre de equipo</h2>
+            <h2 id="nom_equip" class="m-5">Nombre de equipo</h2>
             <p id="nombres">nombres del equipo</p>
             <p id="desc">descripcion</p>
         </div>
@@ -68,11 +68,11 @@
     <script>
       const res = JSON.parse(decodeEntities('<%= res %>'))
       console.log(res)
-      document.getElementById("nom_equip").textContent=res[0].nombre
+      document.getElementById("nom_equip").textContent=res[0].in_nombre
       document.getElementById("nombres").textContent="ya casi (aqui van los integrantes del grupo)"
-      document.getElementById("desc").textContent=res[0].descrip
+      document.getElementById("desc").textContent=res[0].in_texto
       document.getElementById("pdf").setAttribute("src","/pdffiles/file.pdf")
-      document.getElementById("video").setAttribute("src","https://www.youtube.com/embed/iwaUan_AA2A")
+      document.getElementById("video").setAttribute("src",`https://www.youtube.com/embed/${res[0].in_video}`)
     </script>
 </body>
 </html>

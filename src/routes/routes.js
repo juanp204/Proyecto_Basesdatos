@@ -21,11 +21,14 @@ router.get('/', (req, res) => {
         min = pagq
     }
     if(req.query.search == undefined & req.query.id == undefined){
-        consulta = `SELECT * FROM proyectos ORDER BY id DESC LIMIT ${min},${max}`;
+        consulta = `SELECT * FROM iniciativa WHERE iniciativa_estado_id_ie = 2 ORDER BY id_iniciativa DESC LIMIT ${min},${max}`;
         conectado.query(consulta, async (error, results)=>{
         const num = results.length
+        const user = req.session.user
+        const id = req.session.userid
+        console.log(req.session)
         const con = `${JSON.stringify(results)}`;
-        res.render(path.join(route,'views/inicialpg.html'), {pag: num, res: con});
+        res.render(path.join(route,'views/inicialpg.html'), {pag: num, res: con, us: user, id: id});
     })
     }
     else if((req.query.search != undefined) & (req.query.id == undefined)){
@@ -58,7 +61,7 @@ router.get('/registrarse', (req, res) => {
 });
 
 router.get('/ideas/:id', (req, res) => {
-    conectado.query("SELECT * FROM proyectos WHERE id = ?",[req.params["id"]], async (error, results)=>{
+    conectado.query("SELECT * FROM iniciativa WHERE id_iniciativa = ?",[req.params["id"]], async (error, results)=>{
         if(results.length==0){
             res.redirect('/')
         }
@@ -74,10 +77,6 @@ router.get('/nuevaidea', (req, res) => {
 
 });
 
-router.get('/imagen', (req, res) => {
-    res.sendFile(path.join(route,'multimedia/832850.jpg'));
-
-});
 
 //------- css
 
@@ -102,14 +101,21 @@ router.get('/decodehtml.js', (req, res) => {
 
 // ----------- post
 
+router.get('/cerrar', (req, res) => {
+    if(req.session.id != undefined){
+        req.session.destroy();
+    }
+    res.redirect('/')
+});
+
 router.post('/auth',(req, res)=>{
     const user = req.body.user;
     const pass = req.body.pass;
     console.log(user)
     if(user != "" && pass != ""){
-        conectado.query('SELECT * FROM users WHERE usern = ?',[user], (error, results)=>{
+        conectado.query('SELECT * FROM usuario WHERE us_nickname = ?',[user], (error, results)=>{
             console.log(results)
-            if(results.length == 0 || pass!=results[0].pass || error){
+            if(results.length == 0 || pass!=results[0].us_contraseña || error){
                 res.render(path.join(route,'views/init.html'),{
                     alert:true,
                     alertTitle:"Error",
@@ -121,8 +127,8 @@ router.post('/auth',(req, res)=>{
             }
             else{
                 req.session.loggedin = true;
-                req.session.name = results[0].name;
-                req.session.user = results[0].user;
+                req.session.user = results[0].us_nickname;
+                req.session.userid = results[0].tipo_usuario_id_tu;
                 res.redirect('/')
             }
         });
@@ -143,12 +149,16 @@ router.post('/auth',(req, res)=>{
 router.post('/register',async(req, res)=>{
     const user = req.body.name;
     const name = req.body.nombres;
+    const apell = req.body.apellidos;
     const pass = req.body.pass;
+    const email = req.body.email;
+    const fecha = req.body.date;
+    console.log(fecha)
     console.log(user)
-    if(user!="" || name!="" || pass!=""){
-        conectado.query('SELECT * FROM users WHERE usern = ?', [user], async (error, results)=>{
+    if(user!="" & name!="" & pass!="" & apell!="" & email!="" & fecha!=""){
+        conectado.query('SELECT * FROM usuario WHERE us_nickname = ? AND us_correo = ?', [user,email], async (error, results)=>{
             if(results.length == 0){
-                conectado.query('INSERT INTO users SET ?', {usern:user, nombre1:name}, async(error,result)=>{
+                conectado.query('INSERT INTO usuario SET ?', {us_nickname:user, us_pass:pass, us_nombres:name, us_apellidos:apell, us_correo:email, us_fecha_nacimiento:fecha}, async(error,result)=>{
                     if(error){
                         console.log(error)
                         res.render(path.join(route,'views/registrarse.html'),{
@@ -169,7 +179,7 @@ router.post('/register',async(req, res)=>{
                 res.render(path.join(route,'views/registrarse.html'),{
                     alert:true,
                         alertTitle:"Error",
-                        alertMessage: "User ya ocupado",
+                        alertMessage: "User o Email ya ocupado",
                         alertIcon: "error",
                         showConfirmButton: true,
                         timer:false

@@ -17,7 +17,7 @@ app.set('view engine', 'ejs');
 //var.session
 const session = require('express-session')
 app.use(session({
-    secret:'secret',
+    secret:'nosenosesecret123',
     resave: true,
     saveUninitialized:true
 }));
