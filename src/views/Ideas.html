@@ -7,15 +7,62 @@
     <title>Document</title>
     <link rel="stylesheet" href="./bootstrap.css">
     <link rel="stylesheet" href="./bootstrap.min.css">
+    <link rel="stylesheet" href="./estilos.css">
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
+    <script src="/decodehtml.js"></script>
 </head>
-<body style="display: block">
-    <div>
-        <h2>Nombre de equipo</h2>
-        <p>nombres del equipo</p>
-        <p>descripcion aaaaaa aaaaaaa aaaaaa aaaa aa</p>
-
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="/">Nombre de pag</a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="true" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="navbar-collapse collapse show" id="navbarColor01" style="">
+            <ul class="navbar-nav me-auto p-1">
+              <!--li class="nav-item">
+                <a class="nav-link active" href="#">Home
+                  <span class="visually-hidden">(current)</span>
+                </a>
+              </li-->
+              <li class="nav-item dropdown">
+                <% if(typeof user != undefined) { %>
+                    <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">User</a>
+                    <div class="dropdown-menu">
+                    <a class="dropdown-item" href="/init">Iniciar Sesión</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="/registrarse">Registrarse</a>
+                    </div>    
+                <% } %>
+              </li>
+            </ul>
+            <form class="d-flex">
+              <input class="form-control me-sm-2" type="text" placeholder="Search">
+              <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
+            </form>
+          </div>
+        </div>
+    </nav>
+    <div class="text-center w-75 idea">
+        <div>
+            <h2 id="nom_equip">Nombre de equipo</h2>
+            <p id="nombres">nombres del equipo</p>
+            <p id="desc">descripcion</p>
+        </div>
+        <div>
+            <embed id="pdf" type="application/pdf" width="100%" height="500px"/>
+        </div>
+        <iframe id="video" width="100%" height="500px" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
     </div>
-    <embed src="../pdffiles/file.pdf" type="application/pdf" width="60%" height="600px" />
-    <iframe width="100" height="56" src="https://www.youtube.com/embed/iwaUan_AA2A" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+    <script>
+      const res = JSON.parse(decodeEntities('<%= res %>'))
+      console.log(res)
+      document.getElementById("nom_equip").textContent=res[0].nombre
+      document.getElementById("nombres").textContent="ya casi (aqui van los integrantes del grupo)"
+      document.getElementById("desc").textContent=res[0].descrip
+      document.getElementById("pdf").setAttribute("src","./pdffiles/file.pdf")
+      document.getElementById("video").setAttribute("src","https://www.youtube.com/embed/iwaUan_AA2A")
+    </script>
 </body>
 </html>

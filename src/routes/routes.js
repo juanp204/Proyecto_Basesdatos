@@ -21,7 +21,8 @@ router.get('/', (req, res) => {
 });
 
 router.get('/inicialpg', (req, res) => {
-    res.render(path.join(route,'views/inicialpg.html'), {nombre: req.session.name});
+    const id = req.body.id;
+    res.redirect('/')
 
 });
 
@@ -30,6 +31,9 @@ router.get('/init', (req, res) => {
 
 });
 
+router.get('/registrarse', (req, res) => {
+    res.render(path.join(route,'views/registrarse.html'), {nombre: req.session.name});
+});
 
 
 //------- css
@@ -58,10 +62,12 @@ router.get('/decodehtml.js', (req, res) => {
 router.post('/auth',(req, res)=>{
     const user = req.body.user;
     const pass = req.body.pass;
+    console.log(user)
     if(user != "" && pass != ""){
-        conectado.query('SELECT * FROM users WHERE user = ?', [user], async (error, results)=>{
+        conectado.query('SELECT * FROM users WHERE usern = ?',[user], (error, results)=>{
+            console.log(results)
             if(results.length == 0 || pass!=results[0].pass || error){
-                res.render(path.join(route,'views/iniciar.html'),{
+                res.render(path.join(route,'views/init.html'),{
                     alert:true,
                     alertTitle:"Error",
                     alertMessage: "Usuario y/o password incorrecta",
@@ -74,12 +80,12 @@ router.post('/auth',(req, res)=>{
                 req.session.loggedin = true;
                 req.session.name = results[0].name;
                 req.session.user = results[0].user;
-                res.render(path.join(route,'views/barraini.html'), {nombre: req.session.name});
+                res.redirect('/')
             }
-        })
+        });
     }
     else{
-        res.render(path.join(route,'views/iniciar.html'),{
+        res.render(path.join(route,'views/init.html'),{
             alert:true,
             alertTitle:"Error",
             alertMessage: "Campos vacios",
@@ -89,19 +95,20 @@ router.post('/auth',(req, res)=>{
         });
     }
     
-})
+});
 
 router.post('/register',async(req, res)=>{
-    const user = req.body.user;
-    const name = req.body.name;
+    const user = req.body.name;
+    const name = req.body.nombres;
     const pass = req.body.pass;
+    console.log(user)
     if(user!="" || name!="" || pass!=""){
-        conectado.query('SELECT * FROM users WHERE user = ?', [user], async (error, results)=>{
+        conectado.query('SELECT * FROM users WHERE usern = ?', [user], async (error, results)=>{
             if(results.length == 0){
-                conectado.query('INSERT INTO users SET ?', {user:user, name:name , pass:pass}, async(error,result)=>{
+                conectado.query('INSERT INTO users SET ?', {usern:user, nombre1:name}, async(error,result)=>{
                     if(error){
                         console.log(error)
-                        res.render(path.join(route,'views/registrar.html'),{
+                        res.render(path.join(route,'views/registrarse.html'),{
                             alert:true,
                                 alertTitle:"Error",
                                 alertMessage: "ocurrio un error inesperado",
@@ -111,12 +118,12 @@ router.post('/register',async(req, res)=>{
                         });
                     }
                     else{
-                        res.redirect("iniciar");
+                        res.redirect("/init");
                     }
                 })
             }
             else{
-                res.render(path.join(route,'views/registrar.html'),{
+                res.render(path.join(route,'views/registrarse.html'),{
                     alert:true,
                         alertTitle:"Error",
                         alertMessage: "User ya ocupado",
@@ -128,7 +135,7 @@ router.post('/register',async(req, res)=>{
         })
     }
     else{
-        res.render(path.join(route,'views/registrar.html'),{
+        res.render(path.join(route,'views/registrarse.html'),{
             alert:true,
                 alertTitle:"Error",
                 alertMessage: "Espacios vacios",
@@ -139,6 +146,14 @@ router.post('/register',async(req, res)=>{
     }
 })
 
+router.get('/ideas', (req, res) => {
+    console.log(req.query.id)
+    conectado.query("SELECT * FROM proyectos WHERE id = ?",[req.query.id], async (error, results)=>{
+        const con = `${JSON.stringify(results)}`;
+        console.log(results)
+        res.render(path.join(route,'views/ideas.html'), {res: con});
+    })
+});
 
 
 module.exports = router;

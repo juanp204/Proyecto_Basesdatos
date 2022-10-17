@@ -31,7 +31,7 @@ app.use(require('./routes/routes.js'));
 
 //recursos
 //app.use('/multimedia', express.static('multimedia'));
-//app.use('/multimedia', express.static(path.join(__dirname,'/multimedia')));
+app.use('/pdffiles', express.static(path.join(__dirname,'/pdffiles')));
 
 
 //server

@@ -37,20 +37,19 @@
                 <% } %>
               </li>
             </ul>
-            <form class="d-flex">
-              <input class="form-control me-sm-2" type="text" placeholder="Search">
+            <form class="d-flex" action="" method="">
+              <input class="form-control me-sm-2" type="text" placeholder="Search" id="search" name="search">
               <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
             </form>
           </div>
         </div>
     </nav>
     <div class="ideas text-center w-50">
-        <form action="" id="form_ide">
+        <form action="/ideas" id="form_ide" method="get   ">
         </form>  
     </div>
 
     <div class="pag">
-        
         <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
             <form action="" method="">
                 <div class="btn-group me-2" id="from_pag" role="group" aria-label="First group">
@@ -61,7 +60,7 @@
       </div>
     
     <script>
-        for (var i = 1; i < <%= pag %>+1 ; i=i+5){
+        for (var i = 1; i < <%= pag %>+1 ; i=i+4){
             const parent = document.getElementById('from_pag');
             const btn = document.createElement("button");
 

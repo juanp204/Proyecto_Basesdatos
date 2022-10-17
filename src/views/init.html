@@ -43,23 +43,34 @@
           </div>
         </div>
     </nav>
-    <div class="iniciar col-auto p-5 text-center min-w-80 ideas">
-        <form action="" method="post">
+    <div class="iniciar col-auto p-5 text-center min-w-80 form_mid">
+        <form action="auth" method="post">
             <p>
                 Iniciar Sesión
             </p>
             <div>
                 <label class="col-form-label mt-4" for="inputDefault">User Name</label>
-                <input type="text" class="form-control" placeholder="Name" id="inputDefault">
+                <input type="text" class="form-control" name="user" id="usuario" placeholder="usuario123">
             </div>
             <div>
                 <label for="exampleInputPassword1" class="form-label mt-4">Password</label>
-                <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+                <input type="password" class="form-control" name="pass" id="password" placeholder="Password">
             </div>
-            <button type="button" class="btn btn-primary btn-inic btn_inic" onclick="location.href='./inicialpg'">Iniciar Sesión</button>
+            <button type="submit" class="btn btn-primary btn-inic btn_inic">Iniciar Sesión</button>
             <!--button type="submit" class="btn btn-primary">Submit</button-->
         </form>
-        <button type="button" class="btn btn-primary btn_inic" >Registrarse</button>
+        <button type="button" class="btn btn-primary btn_inic" onclick="window.location.href='./registrarse'" >Registrarse</button>
     </div>
+    <% if( typeof alert != "undefined") { %>
+        <script>
+            Swal.fire({
+                title: `<%= alertTitle %>`,
+                text: `<%= alertMessage %>`,
+                icon: `<%= alertIcon %>`,
+                showConfirmButton: <%= showConfirmButton %>,
+                timer: <%= timer %>
+            })
+        </script>
+        <% } %>
 </body>
 </html>
