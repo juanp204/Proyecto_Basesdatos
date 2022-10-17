@@ -44,8 +44,9 @@
           </div>
         </div>
     </nav>
-    <div class="ideas text-center w-50">
-        <form action="/ideas" id="form_ide" method="get   ">
+
+    <div class="">
+        <form action="/" id="form_ide" method="get   ">
         </form>  
     </div>
 
@@ -84,17 +85,24 @@
             const divp = document.createElement("div");
             const divhp = document.createElement("div");
             const nombre = document.createElement("h4");
+            const inte = document.createElement("h6");
             const des = document.createElement("p");
             const btn = document.createElement("button");
-            divp.className = "m-5 bd-highlight caja_ideas";
-            btn.className = "btn btn-primary";
+            divp.className = "card ideas text-center w-50 mt-5 mb-5";
+            divhp.className = "card-body";
+            nombre.className = "card-title";
+            inte.className = "card-subtitle mb-2 text-muted"
+            des.className = "card-text"
+            btn.className = "btn btn-outline-dark m-2";
             btn.textContent = "IR";
             btn.type = "submit";
             btn.name = "id"
             btn.value = `${res[i].id}`
             nombre.textContent = res[i].nombre;
             des.textContent = res[i].descrip;
+            inte.textContent = "aqui van los integrantes"
             divhp.appendChild(nombre);
+            divhp.appendChild(inte);
             divhp.appendChild(des);
             divp.appendChild(divhp);
             divp.appendChild(btn);

@@ -54,6 +54,16 @@
             <embed id="pdf" type="application/pdf" width="100%" height="500px"/>
         </div>
         <iframe id="video" width="100%" height="500px" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+        <hr>
+    </div>
+    <div class="m-2 comentarios">
+      <form action="">
+        <label for="exampleTextarea" class="form-label mt-4">Comentarios</label>
+        <textarea class="form-control m-5" id="exampleTextarea" rows="3" style="height: 60px;"></textarea>
+        <button style="margin-left: 10px;" class="btn btn-secondary my-2 my-sm-0 m-2" type="submit">Publicar</button>
+      </form>
+      <hr>
     </div>
     <script>
       const res = JSON.parse(decodeEntities('<%= res %>'))
@@ -61,7 +71,7 @@
       document.getElementById("nom_equip").textContent=res[0].nombre
       document.getElementById("nombres").textContent="ya casi (aqui van los integrantes del grupo)"
       document.getElementById("desc").textContent=res[0].descrip
-      document.getElementById("pdf").setAttribute("src","./pdffiles/file.pdf")
+      document.getElementById("pdf").setAttribute("src","/pdffiles/file.pdf")
       document.getElementById("video").setAttribute("src","https://www.youtube.com/embed/iwaUan_AA2A")
     </script>
 </body>
