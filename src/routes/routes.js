@@ -10,15 +10,29 @@ console.log(route);
 // ------- html
 
 router.get('/', (req, res) => {
-    consulta = String;
-    console.log(req.body.pagina)
-    if(req.body.pagina == undefined){consulta = "SELECT * FROM proyectos ORDER BY id DESC LIMIT 5"};
-    conectado.query(consulta, async (error, results)=>{
+    pagq = parseInt(req.query.pag)
+    let max, min;
+    if(pagq == undefined | pagq == 1 | isNaN(pagq)){
+        max = 6
+        min = 0
+    }
+    else{
+        max = pagq+6
+        min = pagq
+    }
+    if(req.query.search == undefined){
+        consulta = `SELECT * FROM proyectos ORDER BY id DESC LIMIT ${min},${max}`;
+        conectado.query(consulta, async (error, results)=>{
         const num = results.length
         const con = `${JSON.stringify(results)}`;
         res.render(path.join(route,'views/inicialpg.html'), {pag: num, res: con});
     })
+    }
+    else{
+        res.redirect(`./search/${req.query.search}`)
+    }
 });
+
 
 router.get('/inicialpg', (req, res) => {
     const id = req.body.id;
@@ -35,6 +49,14 @@ router.get('/registrarse', (req, res) => {
     res.render(path.join(route,'views/registrarse.html'), {nombre: req.session.name});
 });
 
+router.get('/ideas', (req, res) => {
+    console.log(req.query.id)
+    conectado.query("SELECT * FROM proyectos WHERE id = ?",[req.query.id], async (error, results)=>{
+        const con = `${JSON.stringify(results)}`;
+        console.log(results)
+        res.render(path.join(route,'views/ideas.html'), {res: con});
+    })
+});
 
 //------- css
 
@@ -146,14 +168,45 @@ router.post('/register',async(req, res)=>{
     }
 })
 
-router.get('/ideas', (req, res) => {
-    console.log(req.query.id)
-    conectado.query("SELECT * FROM proyectos WHERE id = ?",[req.query.id], async (error, results)=>{
-        const con = `${JSON.stringify(results)}`;
-        console.log(results)
-        res.render(path.join(route,'views/ideas.html'), {res: con});
+
+
+router.get('/search/:search', (req, res) => {
+    search = req.params['search']
+    console.log(search)
+    pagq = req.query.pag
+    let max, min;
+    if(pagq == undefined | pagq == 1){
+        max = 6
+        min = 0
+    }
+    else{
+        max = pagq+6
+        min = pagq
+    }
+    let consulta = `SELECT * FROM proyectos WHERE nombre LIKE '%${search}%' ORDER BY id DESC LIMIT ${min},${max}`;
+    conectado.query(consulta, async (error, results)=>{
+        let num;
+        if(results.length==0){
+            const con = `${JSON.stringify(results)}`;
+            res.render(path.join(route,'views/inicialpg.html'), {
+                pag: num, 
+                res: con,
+                alert:true,
+                        alertTitle:"Error",
+                        alertMessage: "No se encontro nada",
+                        alertIcon: "error",
+                        showConfirmButton: true,
+                        timer:false
+            });
+        }
+        else{
+            num = results.length;
+            const con = `${JSON.stringify(results)}`;
+            res.render(path.join(route,'views/inicialpg.html'), {pag: num, res: con});
+        }
     })
 });
+
 
 
 module.exports = router;
