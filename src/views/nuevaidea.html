@@ -92,7 +92,7 @@
               </li>
             <% } %>
           
-          <script>
+          <!--script>
 
             function getvalue(){
               return document.getElementById('agreuser').value
@@ -147,7 +147,7 @@
               }
               }
             }
-          </script>
+          </script-->
         </ul>
         <form class="d-flex" action="/" method="">
           <input class="form-control me-sm-2" type="text" placeholder="Search" id="search" name="search">
@@ -157,35 +157,13 @@
     </div>
   </nav>
 
-  <form action="">
+  <form action="/nuevoproyecto" method="post" enctype="multipart/form-data">
     <div class="ideas w-50 mt-5 mb-5 text-center form-group">
       <label class="col-form-label mt-4" for="inputDefault">Nombre Proyecto</label>
-      <input type="text" class="form-control" placeholder="Nombre Proyecto" id="nomproy" name="nomproy" required>
+      <input type="text" class="form-control" value="" placeholder="Nombre Proyecto" id="nomproy" name="nomproy" required>
     </div>
 
-  <div class="ideas w-50 mt-5 mb-5">
-      <label class="mb-3" for="">agregar usuario</label>
-      <div class="text-center input-group mb-3 w-75">
-          <input type="text" id="agreuser" value="" class="form-control" placeholder="Recipient's username" aria-label="Recipient's username" aria-describedby="button-addon2">
-          <button class="btn btn-primary" type="button" id="btnusers" onclick="peticion(getvalue())">Agregar</button>
-        </div>
-        <div id="resuser" class="list-group w-50 mt-1 mb-5">
-          <label class="mb-3" for="">Selecciona un usuario</label>
-          <button type="button" class="list-group-item list-group-item-action active">Cras justo odio</button>
-          <button type="button" class="list-group-item list-group-item-action">Dapibus ac facilisis in</button>
-          <button type="button" class="list-group-item list-group-item-action active">Cras justo odio</button>
-          <button type="button" class="list-group-item list-group-item-action">Dapibus ac facilisis in</button>
-          <button type="button" class="list-group-item list-group-item-action active">Cras justo odio</button>
-          <button type="button" class="list-group-item list-group-item-action">Dapibus ac facilisis in</button>
-          <button>cancelar</button>
-          <label class="text-secondary" for="">si no encuentras el usuario se mas especifico</label>
-        </div>
-        <div class="form-group w-50">
-            <input class="form-control" id="disabledInput" type="text" value="Juan_p204" disabled="">
-            <button type="button" class="btn btn-outline-danger">Eliminar</button>
-        </div>
-        <hr>
-  </div>
+  
   <div class="form-group ideas w-50 mt-5 mb-5 text-center">
       <label for="exampleTextarea" class="form-label mt-4">Descripcion</label>
       <textarea class="form-control" id="desc" rows="3" style="height: 100px;" name="desc" required></textarea>
@@ -197,13 +175,13 @@
   </div>
 
   <div class="form-group ideas w-50 mt-5 mb-5 text-center">
-      <label class="mb-3" for="">Enlace al video</label>
-      <div class="w-75">
-              <input type="url" class="form-control" style="display: inline;" placeholder="https://youtu" aria-label="Recipient's username" aria-describedby="button-addon2" id="yout" name="yout" pattern="https://youtu.+" required>
+      <label class="mb-3" for="">Enlace al video </label>
+      <div class="">
+              <input type="text" class="form-control" style="display: inline;" placeholder="https://youtu..." aria-label="Recipient's username" aria-describedby="button-addon2" id="yout" name="yout" required>
       </div>
   </div>
 
-  <div class="ideas w-50 mt-5 mb-5">
+  <div class="ideas w-50 mt-5 mb-5 text-center">
     <button class="btn btn-primary m-5" type="submit" id="button-addon2">CREAR PROYECTO</button>
   </div>
   </form>

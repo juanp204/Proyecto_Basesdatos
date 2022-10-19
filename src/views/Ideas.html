@@ -103,13 +103,13 @@
       </div>
     </div>
 </nav>
-    <div class="text-center w-75 idea">
+    <div class="w-75 idea">
         <div>
-            <h2 id="nom_equip" class="m-5">Nombre de equipo</h2>
-            <p id="nombres">nombres del equipo</p>
+            <h2 id="nom_equip" class="mt-5">Nombre de equipo</h2>
+            <div class="m-4" id="nombres"></div>
             <p id="desc">descripcion</p>
         </div>
-        <div>
+        <div class="mb-5 mt-5">
             <embed id="pdf" type="application/pdf" width="100%" height="500px"/>
         </div>
         <iframe id="video" width="100%" height="500px" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
@@ -117,20 +117,30 @@
         <hr>
     </div>
     <div class="m-2 comentarios">
-      <form action="">
+      <form action="/comentar">
         <label for="exampleTextarea" class="form-label mt-4">Comentarios</label>
         <textarea class="form-control m-5" id="exampleTextarea" rows="3" style="height: 60px;"></textarea>
+        <label for="exampleTextarea" class="form-label mt-4">Calificar</label>
+        <input type="range" class="form-range" id="customRange1">
         <button style="margin-left: 10px;" class="btn btn-secondary my-2 my-sm-0 m-2" type="submit">Publicar</button>
       </form>
       <hr>
     </div>
     <script>
-      const res = JSON.parse(decodeEntities('<%= res %>'))
+      const res = JSON.parse(decodeEntities('<%= res %>').replace(new RegExp('\r?\n','g'), '<br />'))
+      const u = JSON.parse(decodeEntities('<%= conu %>'))
       console.log(res)
+      console.log(u)
       document.getElementById("nom_equip").textContent=res[0].in_nombre
-      document.getElementById("nombres").textContent="ya casi (aqui van los integrantes del grupo)"
-      document.getElementById("desc").textContent=res[0].in_texto
-      document.getElementById("pdf").setAttribute("src","/pdffiles/file.pdf")
+      for (let i = 0; i < u.length; i++) {
+        const nombres = document.getElementById("nombres")
+        const p = document.createElement("p")
+        p.textContent= `${u[i].us_nombres} ${u[i].us_apellidos}`
+        nombres.appendChild(p)
+      }
+      document.getElementById("desc").innerHTML=res[0].in_texto
+      console.log(res[0].in_texto)
+      document.getElementById("pdf").setAttribute("src",`/pdffiles/${res[0].id_iniciativa}.pdf`)
       document.getElementById("video").setAttribute("src",`https://www.youtube.com/embed/${res[0].in_video}`)
     </script>
 </body>

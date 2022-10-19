@@ -1,6 +1,8 @@
 const express = require('express');
 const app = express();
 const path = require('path');
+var multer = require("multer");
+var upload = multer();
 
 app.use(express.urlencoded({extended:false}));
 app.use(express.json());
