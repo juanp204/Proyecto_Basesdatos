@@ -9,7 +9,7 @@ console.log(route);
 
 // ------- html
 
-router.get('/', (req, res) => {
+router.get('/', async (req, res) => {
     pagq = parseInt(req.query.pag)
     let max, min;
     if(pagq == undefined | pagq == 1 | isNaN(pagq)){
@@ -21,12 +21,10 @@ router.get('/', (req, res) => {
         min = pagq
     }
     if(req.query.search == undefined & req.query.id == undefined){
-        consulta = `SELECT * FROM iniciativa WHERE iniciativa_estado_id_ie = 2 ORDER BY id_iniciativa DESC LIMIT ${min},${max}`;
-        conectado.query(consulta, async (error, results)=>{
+        conectado.query(`SELECT * FROM iniciativa WHERE iniciativa_estado_id_ie = 2 ORDER BY id_iniciativa DESC LIMIT ${min},${max}`, async (error, results)=>{
         const num = results.length
         const user = req.session.user
         const id = req.session.userid
-        console.log(req.session)
         const con = `${JSON.stringify(results)}`;
         res.render(path.join(route,'views/inicialpg.html'), {pag: num, res: con, us: user, id: id});
     })
@@ -40,82 +38,116 @@ router.get('/', (req, res) => {
 });
 
 
-router.get('/inicialpg', (req, res) => {
+router.get('/inicialpg', async (req, res) => {
     res.redirect('/')
 
 });
 
-router.get('/search', (req, res) => {
+router.get('/search', async (req, res) => {
     const id = req.body.id;
     res.redirect('/search/ ')
 
 });
 
-router.get('/init', (req, res) => {
-    res.render(path.join(route,'views/init.html'), {nombre: req.session.name});
+router.get('/init', async (req, res) => {
+    const user = req.session.user
+    const id = req.session.userid
+    res.render(path.join(route,'views/init.html'), {us: user, id: id});
 
 });
 
-router.get('/registrarse', (req, res) => {
-    res.render(path.join(route,'views/registrarse.html'), {nombre: req.session.name});
+router.get('/registrarse', async (req, res) => {
+    const user = req.session.user
+    const id = req.session.userid
+    res.render(path.join(route,'views/registrarse.html'), {us: user, id: id});
 });
 
-router.get('/ideas/:id', (req, res) => {
+router.get('/ideas/:id', async (req, res) => {
     conectado.query("SELECT * FROM iniciativa WHERE id_iniciativa = ?",[req.params["id"]], async (error, results)=>{
+        const user = req.session.user
+        const id = req.session.userid
         if(results.length==0){
             res.redirect('/')
         }
         else{
             const con = `${JSON.stringify(results)}`;
-            res.render(path.join(route,'views/ideas.html'), {res: con});
+            res.render(path.join(route,'views/ideas.html'), {res: con, us: user, id: id});
         }
     })
 });
 
-router.get('/nuevaidea', (req, res) => {
-    res.render(path.join(route,'views/nuevaidea.html'), {nombre: req.session.name});
+router.get('/perfil/:nom', async (req, res) => {
+    conectado.query("SELECT * FROM usuario WHERE us_nickname = ?",[req.params["nom"]], async (error, results)=>{
+        const user = req.session.user
+        const id = req.session.userid
+        if(results.length==0){
+            res.redirect('/')
+        }
+        else{
+            const con = `${JSON.stringify(results)}`;
+            res.render(path.join(route,'views/perfil.html'), {res: con, us: user, id: id});
+        }
+    })
+});
+
+router.get('/user/:nom', (req, res) => {
+    conectado.query(`SELECT * FROM usuario WHERE us_nickname LIKE '%${req.params["nom"]}%' ORDER BY us_nickname ASC LIMIT 6`, async (error, results)=>{
+        //const con = `${JSON.stringify(results)}`;
+        console.log(results)
+        res.send({'results': results});
+    })
+});
+
+router.get('/nuevaidea', async (req, res) => {
+    const user = req.session.user
+    const id = req.session.userid
+    res.render(path.join(route,'views/nuevaidea.html'), {us: user, id: id});
 
 });
 
 
 //------- css
 
-router.get('/bootstrap.css', (req, res) => {
+router.get('/bootstrap.css', async (req, res) => {
     res.sendFile(path.join(route,'css/bootstrap.css'));
 });
 
-router.get('/bootstrap.min.css', (req, res) => {
+router.get('/bootstrap.min.css', async (req, res) => {
     res.sendFile(path.join(route,'css/bootstrap.min.css'));
 });
 
-router.get('/estilos.css', (req, res) => {
+router.get('/estilos.css', async (req, res) => {
     res.sendFile(path.join(route,'css/estilos.css'));
 });
 
 
 // ------ js
 
-router.get('/decodehtml.js', (req, res) => {
+router.get('/decodehtml.js', async (req, res) => {
     res.sendFile(path.join(route,'scripts/decodehtml.js'));
+});
+
+router.get('/peticionusers.js', async (req, res) => {
+    res.sendFile(path.join(route,'scripts/peticionusers.js'));
 });
 
 // ----------- post
 
-router.get('/cerrar', (req, res) => {
-    if(req.session.id != undefined){
+router.get('/cerrar', async (req, res) => {
+    if(req.session.userid != undefined){
         req.session.destroy();
     }
     res.redirect('/')
 });
 
-router.post('/auth',(req, res)=>{
+router.post('/auth', async (req, res)=>{
     const user = req.body.user;
     const pass = req.body.pass;
     console.log(user)
     if(user != "" && pass != ""){
         conectado.query('SELECT * FROM usuario WHERE us_nickname = ?',[user], (error, results)=>{
             console.log(results)
-            if(results.length == 0 || pass!=results[0].us_contraseña || error){
+            if(results.length == 0 || pass!=results[0].us_pass || error){
                 res.render(path.join(route,'views/init.html'),{
                     alert:true,
                     alertTitle:"Error",
@@ -146,7 +178,7 @@ router.post('/auth',(req, res)=>{
     
 });
 
-router.post('/register',async(req, res)=>{
+router.post('/register', (req, res)=>{
     const user = req.body.name;
     const name = req.body.nombres;
     const apell = req.body.apellidos;
@@ -156,7 +188,7 @@ router.post('/register',async(req, res)=>{
     console.log(fecha)
     console.log(user)
     if(user!="" & name!="" & pass!="" & apell!="" & email!="" & fecha!=""){
-        conectado.query('SELECT * FROM usuario WHERE us_nickname = ? AND us_correo = ?', [user,email], async (error, results)=>{
+        conectado.query(`SELECT * FROM usuario WHERE us_nickname = '${user}' OR us_correo = '${email}'`, async (error, results)=>{
             if(results.length == 0){
                 conectado.query('INSERT INTO usuario SET ?', {us_nickname:user, us_pass:pass, us_nombres:name, us_apellidos:apell, us_correo:email, us_fecha_nacimiento:fecha}, async(error,result)=>{
                     if(error){
@@ -201,9 +233,11 @@ router.post('/register',async(req, res)=>{
 
 
 
-router.get('/search/:search', (req, res) => {
+router.get('/search/:search', async (req, res) => {
     search = req.params['search'].trim()
     pagq = req.query.pag
+    const user = req.session.user
+    const id = req.session.userid
     let max, min;
     if(pagq == undefined | pagq == 1){
         max = 6
@@ -213,14 +247,17 @@ router.get('/search/:search', (req, res) => {
         max = pagq+6
         min = pagq
     }
-    let consulta = `SELECT * FROM proyectos WHERE nombre LIKE '%${search}%' ORDER BY id DESC LIMIT ${min},${max}`;
+    let consulta = `SELECT * FROM iniciativa WHERE in_nombre LIKE '%${search}%' ORDER BY id_iniciativa DESC LIMIT ${min},${max}`;
     conectado.query(consulta, async (error, results)=>{
+        console.log(results)
         let num;
         if(results == undefined){
             const con = `${JSON.stringify(results)}`;
             res.render(path.join(route,'views/inicialpg.html'), {
                 pag: num, 
                 res: con,
+                us: user,
+                id: id,
                 alert:true,
                         alertTitle:"Error",
                         alertMessage: "No se encontro nada",
@@ -234,6 +271,8 @@ router.get('/search/:search', (req, res) => {
             res.render(path.join(route,'views/inicialpg.html'), {
                 pag: num, 
                 res: con,
+                us: user,
+                id: id,
                 alert:true,
                         alertTitle:"Error",
                         alertMessage: "No se encontro nada",
@@ -243,9 +282,9 @@ router.get('/search/:search', (req, res) => {
             });
         }
         else{
-            num = results.length;
+            const num = results.length
             const con = `${JSON.stringify(results)}`;
-            res.render(path.join(route,'views/inicialpg.html'), {pag: num, res: con});
+            res.render(path.join(route,'views/inicialpg.html'), {pag: num, res: con, us: user, id: id});
         }
     })
 });

@@ -12,71 +12,202 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-        <div class="container-fluid">
-          <a class="navbar-brand" href="/">Nombre de pag</a>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="true" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-          </button>
-          <div class="navbar-collapse collapse show" id="navbarColor01" style="">
-            <ul class="navbar-nav me-auto">
-              <!--li class="nav-item">
-                <a class="nav-link active" href="#">Home
-                  <span class="visually-hidden">(current)</span>
-                </a>
-              </li-->
-              <li class="nav-item dropdown">
-                
-                <% if(typeof nombre != undefined) { %>
-                    <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">User</a>
-                    <div class="dropdown-menu">
-                    <a class="dropdown-item" href="/init">Iniciar Sesión</a>
-                    <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="/registrarse">Registrarse</a>
-                    </div>    
-                <% } %>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="/">Nombre de pag</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="true" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="navbar-collapse collapse show" id="navbarColor01" style="">
+        <ul class="navbar-nav me-auto">
+            <% if(us == undefined) { %>
+                <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">User</a>
+                <div class="dropdown-menu">
+                <a class="dropdown-item" href="/init">Iniciar Sesión</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="/registrarse">Registrarse</a>
+                </div>
+                </li>   
+            <% } %>
+              <%if(id == 5) { %>
+                <li class="nav-item">
+                  <a class="nav-link" href="#">Usuarios</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="#">Iniciativas</a>
+                </li>
+                <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">ADMIN</a>
+                <div class="dropdown-menu">
+                <a class="dropdown-item" href="/perfil/<%= us %>">Perfil</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="/cerrar">Cerrar Sesion</a>
+                </div>
+              </li>  
+            <% } %>
+            <%if(id == 4) { %>
+              <li class="nav-item">
+                <a class="nav-link" href="#">Usuarios</a>
               </li>
-            </ul>
-            <form class="d-flex" action="/" method="">
-              <input class="form-control me-sm-2" type="text" placeholder="Search" id="search" name="search">
-              <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
-            </form>
-          </div>
-        </div>
-    </nav>
+              <li class="nav-item">
+                <a class="nav-link" href="#">Iniciativas</a>
+              </li>
+              <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">COORDINADORES</a>
+                <div class="dropdown-menu">
+                <a class="dropdown-item" href="/perfil/<%= us %>">Perfil</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="/cerrar">Cerrar Sesion</a>
+                </div>
+              </li>
+            <% } %>
+            <%if(id == 3) { %>
+              <li class="nav-item">
+                <a class="nav-link" href="/nuevaidea">Crear iniciativas</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">Mis iniciativas</a>
+              </li>
+              <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"> <%= us %>  </a>
+                <div class="dropdown-menu">
+                <a class="dropdown-item" href="/perfil/<%= us %>">Perfil</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="/cerrar">Cerrar Sesion</a>
+                </div>
+              </li> 
+            <% } %>
+            <%if(id == 1 | id == 2) { %>
+              <li class="nav-item">
+                <a class="nav-link" href="#">Mis Iniciativas</a>
+              </li>
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"><%= us %></a>
+                <div class="dropdown-menu">
+                <a class="dropdown-item" href="/perfil/<%= us %>">Perfil</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="/cerrar">Cerrar Sesion</a>
+                </div>
+              </li>
+            <% } %>
+          
+          <script>
 
+            function getvalue(){
+              return document.getElementById('agreuser').value
+            }
+
+            async function peticion(srt){
+              console.log(srt)
+              fetch(`http://localhost/user/${srt}`)
+              .then(result => result.json())
+              .then(data => mostrar(data))
+              .catch(err => console.error(err));
+
+              const mostrar = (result) => {
+                console.log(result)
+                console.log("1")
+              if (result.results.length!=0) {
+                console.log("return")
+                const arr = result
+                console.log("paso")
+                console.log(arr)
+                document.getElementById("btnusers").className = document.getElementById("btnusers").className + " disabled"
+                const parent = document.getElementById("resuser")
+                const label = document.createElement("label")
+                label.textContent = "Selecciona un usuario"
+                label.id = "labelusers"
+                parent.appendChild(label)
+            for (let i = 0; i < arr.length ; i++) {
+              try {
+                console.log("entra")
+                console.log(arr.results[0].id_usuario)
+                console.log("2")
+                const name = arr.results[i].us_nickname
+                const id = arr.result[i].id_usuario
+                console.log(name)
+                const btn = document.createElement("button")
+                btn.textContent = name;
+                btn.setAttribute('onclick',`funcionn(${id})`)
+                btn.id = `btnuser${i}`
+                btn.className = "list-group-item list-group-item-action"
+                btn.type = "button"
+                parent.appendChild(btn)
+
+              } catch (error) {
+                console.log(error)
+                if(!!document.getElementById(`btnuser${i}`)){
+                  document.getElementById(`btnuser${i}`).remove()
+                }
+              }
+              
+            }
+                return;
+              }
+              }
+            }
+          </script>
+        </ul>
+        <form class="d-flex" action="/" method="">
+          <input class="form-control me-sm-2" type="text" placeholder="Search" id="search" name="search">
+          <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
+        </form>
+      </div>
+    </div>
+  </nav>
+
+  <form action="">
     <div class="ideas w-50 mt-5 mb-5 text-center form-group">
-        <label class="col-form-label mt-4" for="inputDefault">Nombre Proyecto</label>
-        <input type="text" class="form-control" placeholder="Nombre Proyecto" id="nomproy" name="nomproy" required>
+      <label class="col-form-label mt-4" for="inputDefault">Nombre Proyecto</label>
+      <input type="text" class="form-control" placeholder="Nombre Proyecto" id="nomproy" name="nomproy" required>
+    </div>
+
+  <div class="ideas w-50 mt-5 mb-5">
+      <label class="mb-3" for="">agregar usuario</label>
+      <div class="text-center input-group mb-3 w-75">
+          <input type="text" id="agreuser" value="" class="form-control" placeholder="Recipient's username" aria-label="Recipient's username" aria-describedby="button-addon2">
+          <button class="btn btn-primary" type="button" id="btnusers" onclick="peticion(getvalue())">Agregar</button>
+        </div>
+        <div id="resuser" class="list-group w-50 mt-1 mb-5">
+          <label class="mb-3" for="">Selecciona un usuario</label>
+          <button type="button" class="list-group-item list-group-item-action active">Cras justo odio</button>
+          <button type="button" class="list-group-item list-group-item-action">Dapibus ac facilisis in</button>
+          <button type="button" class="list-group-item list-group-item-action active">Cras justo odio</button>
+          <button type="button" class="list-group-item list-group-item-action">Dapibus ac facilisis in</button>
+          <button type="button" class="list-group-item list-group-item-action active">Cras justo odio</button>
+          <button type="button" class="list-group-item list-group-item-action">Dapibus ac facilisis in</button>
+          <button>cancelar</button>
+          <label class="text-secondary" for="">si no encuentras el usuario se mas especifico</label>
+        </div>
+        <div class="form-group w-50">
+            <input class="form-control" id="disabledInput" type="text" value="Juan_p204" disabled="">
+            <button type="button" class="btn btn-outline-danger">Eliminar</button>
+        </div>
+        <hr>
+  </div>
+  <div class="form-group ideas w-50 mt-5 mb-5 text-center">
+      <label for="exampleTextarea" class="form-label mt-4">Descripcion</label>
+      <textarea class="form-control" id="desc" rows="3" style="height: 100px;" name="desc" required></textarea>
+    </div>
+
+  <div class="form-group ideas w-50 mt-5 mb-5 text-center">
+  <label for="formFile" class="form-label mt-4">PDF del proyecto</label>
+  <input class="form-control" type="file" id="formfile" accept="application/pdf" name="formfile" required>
+  </div>
+
+  <div class="form-group ideas w-50 mt-5 mb-5 text-center">
+      <label class="mb-3" for="">Enlace al video</label>
+      <div class="w-75">
+              <input type="url" class="form-control" style="display: inline;" placeholder="https://youtu" aria-label="Recipient's username" aria-describedby="button-addon2" id="yout" name="yout" pattern="https://youtu.+" required>
       </div>
+  </div>
 
-    <div class="ideas w-50 mt-5 mb-5">
-        <label class="mb-3" for="">agregar usuario</label>
-        <div class="text-center input-group mb-3 w-75">
-            <input type="text" class="form-control" placeholder="Recipient's username" aria-label="Recipient's username" aria-describedby="button-addon2">
-            <button class="btn btn-primary" type="button" id="button-addon2">Button</button>
-          </div>
-    </div>
+  <div class="ideas w-50 mt-5 mb-5">
+    <button class="btn btn-primary m-5" type="submit" id="button-addon2">CREAR PROYECTO</button>
+  </div>
+  </form>
 
-    <div class="form-group ideas w-50 mt-5 mb-5 text-center">
-        <label for="exampleTextarea" class="form-label mt-4">Descripcion</label>
-        <textarea class="form-control" id="desc" rows="3" style="height: 100px;" name="desc"></textarea required>
-      </div>
-
-    <div class="form-group ideas w-50 mt-5 mb-5 text-center">
-    <label for="formFile" class="form-label mt-4">PDF del proyecto</label>
-    <input class="form-control" type="file" id="formfile" accept="application/pdf" name="formfile" required>
-    </div>
-
-    <div class="ideas w-50 mt-5 mb-5">
-        <label class="mb-3" for="">Enlace al video</label>
-        <div class="text-center input-group mb-3 w-75">
-            <form action="">
-                <input type="url" class="form-control" placeholder="https://youtu" aria-label="Recipient's username" aria-describedby="button-addon2" id="yout" name="yout" pattern="https://youtu.+">
-                <button class="btn btn-primary" type="submit" id="button-addon2">Button</button>
-            </form>
-          </div>
-    </div>
     
 </body>
 </html>

@@ -35,37 +35,55 @@
                     <li class="nav-item">
                       <a class="nav-link" href="#">Usuarios</a>
                     </li>
+                    <li class="nav-item">
+                      <a class="nav-link" href="#">Iniciativas</a>
+                    </li>
                     <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">ADMIN</a>
                     <div class="dropdown-menu">
-                    <a class="dropdown-item" href="/init">Perfil</a>
+                    <a class="dropdown-item" href="/perfil/<%= us %>">Perfil</a>
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item" href="/cerrar">Cerrar Sesion</a>
                     </div>
                   </li>  
                 <% } %>
                 <%if(id == 4) { %>
-                  <li class="nav-item dropdown"></li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="#">Usuarios</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="#">Iniciativas</a>
+                  </li>
+                  <li class="nav-item dropdown">
                   <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">COORDINADORES</a>
                     <div class="dropdown-menu">
-                    <a class="dropdown-item" href="/init">Perfil</a>
+                    <a class="dropdown-item" href="/perfil/<%= us %>">Perfil</a>
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item" href="/cerrar">Cerrar Sesion</a>
                     </div>
                   </li>
                 <% } %>
                 <%if(id == 3) { %>
-                  <li class="nav-item dropdown"></li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="/nuevaidea">Crear iniciativas</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="#">Mis iniciativas</a>
+                  </li>
+                  <li class="nav-item dropdown">
                   <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"> <%= us %>  </a>
                     <div class="dropdown-menu">
-                    <a class="dropdown-item" href="/init">Perfil</a>
+                    <a class="dropdown-item" href="/perfil/<%= us %>">Perfil</a>
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item" href="/cerrar">Cerrar Sesion</a>
                     </div>
                   </li> 
                 <% } %>
                 <%if(id == 1 | id == 2) { %>
-                  <li class="nav-item dropdown"></li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="#">Mis Iniciativas</a>
+                  </li>
+                  <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"><%= us %></a>
                     <div class="dropdown-menu">
                     <a class="dropdown-item" href="/init">Perfil</a>
