@@ -39,6 +39,29 @@ router.get('/', async (req, res) => {
     }
 });
 
+router.get('/coordinador', async (req, res) => {
+    pagq = parseInt(req.query.pag)
+    let max, min;
+    if(pagq == undefined | pagq == 1 | isNaN(pagq)){
+        max = 6
+        min = 0
+    }
+    else{
+        max = pagq+6
+        min = pagq
+    }
+    if(req.query.search == undefined & req.query.id == undefined){
+        conectado.query(`SELECT * FROM usuario WHERE tipo_usuario_id_tu < 4 LIMIT ${min},${max}`, async (error, results)=>{
+        const num = results.length
+        const user = req.session.user
+        const id = req.session.tipeuser
+        const con = `${JSON.stringify(results)}`;
+        res.render(path.join(route,'views/Coordinador.html'), {pag: num, res: con, us: user, id: id});
+    })
+    }
+});
+
+
 
 router.get('/inicialpg', async (req, res) => {
     res.redirect('/')
@@ -82,47 +105,65 @@ router.get('/registrarse', async (req, res) => {
 //------------------------ideas
 router.get('/ideas/:id', async (req, res) => {
     const idea = req.params["id"]
-    conectado.query("SELECT * FROM iniciativa WHERE id_iniciativa = ?",[idea], async (error, results)=>{
-        conectado.query("SELECT us_nombres, us_apellidos FROM usuario INNER JOIN grupo_estudiante ON usuario.id_usuario = grupo_estudiante.usuario_id_usuario WHERE grupo_estudiante.iniciativa_id_iniciativa = ?",[idea],(error,result)=>{
-            const user = req.session.user
-            const id = req.session.tipeuser
-            if(results.length==0){
-                res.redirect('/')
+    al=false
+    if(req.query.comentario != undefined){
+        conectado.query("INSERT INTO publicacion SET ?",{pu_comentario:req.query.comentario,pu_calificacion:req.query.califica,iniciativa_id_iniciativa:idea,usuario_id_usuario:req.session.userid},(error0)=>{
+            if (error0){
+                console.log("error idea")
+                al=true;
             }
-            else{
-                const con = `${JSON.stringify(results)}`;
-                const conu = `${JSON.stringify(result)}`;
-                res.render(path.join(route,'views/ideas.html'), {res: con, us: user, id: id, conu: conu});
-            }
+        })
+    }
+    conectado.query("SELECT * FROM iniciativa WHERE id_iniciativa = ?",[idea], async (error1, results)=>{
+        conectado.query("SELECT us_nombres, us_apellidos FROM usuario INNER JOIN grupo_estudiante ON usuario.id_usuario = grupo_estudiante.usuario_id_usuario WHERE grupo_estudiante.iniciativa_id_iniciativa = ?",[idea],async(error2,result)=>{
+            conectado.query("SELECT pu_comentario,us_nombres FROM publicacion INNER JOIN usuario ON usuario_id_usuario=id_usuario WHERE iniciativa_id_iniciativa = ? ORDER BY id_publicacion DESC",[idea],async(error3,comenta)=>{
+                conectado.query("SELECT AVG(pu_calificacion) califica FROM publicacion WHERE iniciativa_id_iniciativa = ?",[idea],(error4, calif)=>{
+                    const user = req.session.user
+                    const id = req.session.tipeuser
+                    const cali = calif[0].califica
+                    if(results.length==0){
+                        res.redirect('/')
+                    }
+                    else{
+                        const con = `${JSON.stringify(results)}`;
+                        const conu = `${JSON.stringify(result)}`;
+                        const com = `${JSON.stringify(comenta)}`;
+                        res.render(path.join(route,'views/ideas.html'), {
+                            res: con,
+                            us: user,
+                            id: id,
+                            conu: conu,
+                            cal: cali,
+                            com: com,
+                            alert: al,
+                            alertTitle:"Error",
+                            alertMessage: "Tiene que iniciar sesion para comentar",
+                            alertIcon: "error",
+                            showConfirmButton: true,
+                            timer:false
+                                });
+                    }
+                })
+            })
         })
 
     })
 });
 
-router.get('/perfil/:nom', async (req, res) => {
-    conectado.query("SELECT * FROM usuario WHERE us_nickname = ?",[req.params["nom"]], async (error, results)=>{
-        const user = req.session.user
-        const id = req.session.tipeuser
-        if(results.length==0){
-            res.redirect('/')
-        }
-        else{
-            const con = `${JSON.stringify(results)}`;
-            res.render(path.join(route,'views/perfil.html'), {res: con, us: user, id: id});
-        }
-    })
-});
+
 
 router.get('/perfil/:nom', async (req, res) => {
-    conectado.query("SELECT * FROM usuario WHERE us_nickname = ?",[req.params["nom"]], async (error, results)=>{
+    conectado.query("SELECT us_nickname,us_nombres,us_apellidos,us_fecha_nacimiento,us_correo,us_id_uni,us_universidad,us_facultad,us_semestre FROM usuario WHERE us_nickname = ?",[req.params["nom"]], async (error, results)=>{
         const user = req.session.user
+        const nom = req.params["nom"]
         const id = req.session.tipeuser
+        //const
         if(results.length==0){
             res.redirect('/')
         }
         else{
             const con = `${JSON.stringify(results)}`;
-            res.render(path.join(route,'views/perfil.html'), {res: con, us: user, id: id});
+            res.render(path.join(route,'views/perfil.html'), {res: con, us: user, id: id, nom:nom});
         }
     })
 });
@@ -159,7 +200,13 @@ router.get('/estilos.css', async (req, res) => {
 });
 
 
-router.get
+router.get('/Coordinador.css', async (req,res)=>{
+    res.sendFile(path.join(route,'css/Coordinador.css'));
+})
+
+router.get('/Style.css', async (req,res)=>{
+    res.sendFile(path.join(route,'css/Style.css'));
+})
 
 // ------ js
 
@@ -191,29 +238,6 @@ const upload = multer({
 
 router.post("/nuevoproyecto",upload.array("formfile"),(req,res)=>{
     const nomproy = req.body.nomproy;
-    const user = req.session.user
-
-    if(req.session.tipeuser != undefined){
-        console.log(nomproy,desc,yout)
-        conectado.query('INSERT INTO iniciativa SET ?', {in_nombre:nomproy, in_texto:desc, in_video:yout}, async(error,results)=>{
-            conectado.query('SELECT id_iniciativa FROM iniciativa ORDER BY id_iniciativa DESC LIMIT 1', (error, result)=>{
-                console.log(result[0].id_iniciativa)
-                req.session.newfile = result[0].id_iniciativa;
-                console.log(req.session.userid)
-                conectado.query('INSERT INTO grupo_estudiante SET ?', {usuario_id_usuario:req.session.userid, iniciativa_id_iniciativa: req.session.newfile , rol_id_rol:1}, async(error,result2)=>{
-                    console.log(error)
-                    console.log(result2)
-                    res.redirect(`/ideas/${result[0].id_iniciativa}`)
-                });
-            })
-        });
-    }else{
-        res.redirect('/')
-    }
-});
-
-router.post("/comentar",(req,res)=>{
-    const nomproy = req.body.comentario;
     const desc = req.body.desc;
     const yout = req.body.yout;
     if(req.session.tipeuser != undefined){
@@ -235,6 +259,7 @@ router.post("/comentar",(req,res)=>{
     }
 });
 
+
 router.get('/cerrar', async (req, res) => {
     if(req.session.tipeuser != undefined){
         req.session.destroy();
@@ -247,9 +272,9 @@ router.post('/auth', async (req, res)=>{
     const pass = req.body.pass;
     console.log(user)
     if(user != "" && pass != ""){
-        conectado.query('SELECT * FROM usuario WHERE us_nickname = ?',[user], (error, results)=>{
+        conectado.query('SELECT * FROM usuario WHERE us_nickname = ? AND tipo_usuario_id_tu <> 6',[user], (error, results)=>{
             console.log(results)
-            if(results.length == 0 || pass!=results[0].us_pass || error){
+            if(error || results.length == 0 || pass!=results[0].us_pass){
                 res.render(path.join(route,'views/init.html'),{
                     alert:true,
                     alertTitle:"Error",

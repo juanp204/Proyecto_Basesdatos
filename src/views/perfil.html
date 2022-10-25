@@ -4,9 +4,142 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/bootstrap.css">
+    <link rel="stylesheet" href="/bootstrap.min.css">
+    <link rel="stylesheet" href="/estilos.css">
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
+    <script src="/decodehtml.js"></script>
     <title>Document</title>
 </head>
 <body>
-    
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="/">Nombre de pag</a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="true" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="navbar-collapse collapse show" id="navbarColor01" style="">
+            <ul class="navbar-nav me-auto">
+                <% if(us == undefined) { %>
+                    <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">User</a>
+                    <div class="dropdown-menu">
+                    <a class="dropdown-item" href="/init">Iniciar Sesión</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="/registrarse">Registrarse</a>
+                    </div>
+                    </li>   
+                <% } %>
+                  <%if(id == 5) { %>
+                    <li class="nav-item">
+                      <a class="nav-link" href="#">Usuarios</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" href="#">Iniciativas</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">ADMIN</a>
+                    <div class="dropdown-menu">
+                    <a class="dropdown-item" href="/perfil/<%= us %>">Perfil</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="/cerrar">Cerrar Sesion</a>
+                    </div>
+                  </li>  
+                <% } %>
+                <%if(id == 4) { %>
+                  <li class="nav-item">
+                    <a class="nav-link" href="#">Usuarios</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="#">Iniciativas</a>
+                  </li>
+                  <li class="nav-item dropdown">
+                  <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">COORDINADORES</a>
+                    <div class="dropdown-menu">
+                    <a class="dropdown-item" href="/perfil/<%= us %>">Perfil</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="/cerrar">Cerrar Sesion</a>
+                    </div>
+                  </li>
+                <% } %>
+                <%if(id == 3) { %>
+                  <li class="nav-item">
+                    <a class="nav-link" href="/nuevaidea">Crear iniciativas</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="#">Mis iniciativas</a>
+                  </li>
+                  <li class="nav-item dropdown">
+                  <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"> <%= us %>  </a>
+                    <div class="dropdown-menu">
+                    <a class="dropdown-item" href="/perfil/<%= us %>">Perfil</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="/cerrar">Cerrar Sesion</a>
+                    </div>
+                  </li> 
+                <% } %>
+                <%if(id == 1 | id == 2) { %>
+                  <li class="nav-item">
+                    <a class="nav-link" href="#">Mis Iniciativas</a>
+                  </li>
+                  <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"><%= us %></a>
+                    <div class="dropdown-menu">
+                    <a class="dropdown-item" href="/init">Perfil</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="/cerrar">Cerrar Sesion</a>
+                    </div>
+                  </li>
+                <% } %>
+              
+              <script>
+              </script>
+            </ul>
+            <form class="d-flex" action="/" method="">
+              <input class="form-control me-sm-2" type="text" placeholder="Search" id="search" name="search">
+              <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
+            </form>
+          </div>
+        </div>
+    </nav>
+
+    <div class="m-5">
+        <h2 id="nombres">nombres</h2> <br>
+        <label id="nickname">nickname</label> <br>
+        <label id="fecha">fecha de nacimiento:</label> <br>
+        <label id="email">email:</label> <br>
+    </div>
+    <hr>
+    <div class="m-5">
+        <label >Estudiante:</label><br>
+        <label id="id_u">Id Universidad: no es estudiante</label><br>
+        <label id="facul">Facultad: no es estudiante</label><br>
+        <label id="semes">semestre: no es estudiante</label><br>
+        <label id="prom">Promedio: no es estudiante</label>
+    </div>
+    <hr>
+    <div class="m-5">
+      <% if(nom == us) { %>
+        <a href="/editarperfil" type="button">
+          <button>editar datos</button>
+        </a>
+    <% } %>
+    </div>
+    <script>
+        const res = JSON.parse(decodeEntities('<%= res %>').replace(new RegExp('\r?\n','g'), ' '))
+        document.getElementById("nombres").textContent = `${res[0].us_nombres} ${res[0].us_apellidos}`
+        document.getElementById("nickname").textContent = `${res[0].us_nickname}`
+        document.getElementById("fecha").textContent = `fecha de nacimiento:` + ` ${res[0].us_fecha_nacimiento}`.slice(0,11)
+        document.getElementById("email").textContent = `correo: ${res[0].us_correo}`
+
+        if(res[0].us_id_uni != null){
+          document.getElementById("id_u").textContent = `Id universidad: ${res[0].us_id_uni}`
+          document.getElementById("facul").textContent = `Facultad: ${res[0].us_facultad}`
+          document.getElementById("semes").textContent = `semestre: ${res[0].us_semestre}`
+          document.getElementById("prom").textContent = `promedio: ${res[0].us_promedio}`
+        }
+
+    </script>
 </body>
 </html>

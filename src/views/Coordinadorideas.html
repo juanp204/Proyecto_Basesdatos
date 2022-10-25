@@ -1,16 +1,16 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8" >
+    <link rel="stylesheet" href="/Coordinador.css">
+    <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inicio</title>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
+    <script src="/decodehtml.js"></script>
     <link rel="stylesheet" href="/bootstrap.css">
     <link rel="stylesheet" href="/bootstrap.min.css">
     <link rel="stylesheet" href="/estilos.css">
-    <script src="//cdn.jsdelivr.net/npm/sweetalert2@10"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
-    <script src="/decodehtml.js"></script>
+    <title>Coordinador</title>
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
@@ -33,7 +33,7 @@
                 <% } %>
                   <%if(id == 5) { %>
                     <li class="nav-item">
-                      <a class="nav-link" href="/coordinador">Usuarios</a>
+                      <a class="nav-link" href="#">Usuarios</a>
                     </li>
                     <li class="nav-item">
                       <a class="nav-link" href="#">Iniciativas</a>
@@ -86,7 +86,7 @@
                   <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"><%= us %></a>
                     <div class="dropdown-menu">
-                    <a class="dropdown-item" href="/perfil">Perfil</a>
+                    <a class="dropdown-item" href="/perfil/<%= us %>">Perfil</a>
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item" href="/cerrar">Cerrar Sesion</a>
                     </div>
@@ -104,9 +104,22 @@
         </div>
     </nav>
 
-    <div class="">
-        <form action="/" id="form_ide" method="get   ">
-        </form>  
+    <h2>Responsive Table</h2>
+    <div class="table-wrapper">
+      <form action="">
+        <table class="fl-table" id="table">
+          <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nombre idea</th>
+                <th>Nombres</th>
+                <th>Apellidos</th>
+                <th>E-mail</th>
+                <th>Borrar</th>
+            </tr>
+            </thead>
+        </table>
+      </form>
     </div>
 
     <div class="pag">
@@ -130,7 +143,7 @@
             else{btn.textContent=">>"}
             btn.value=i;
             btn.name="pag"
-
+            
             parent.appendChild(btn);
         }
     </script>
@@ -140,52 +153,33 @@
         console.log(res)
         for (var i = 0; i <=4; i++){
             console.log(i)
-            const parent = document.getElementById("form_ide");
-            const divp = document.createElement("div");
-            const divhp = document.createElement("div");
-            const nombre = document.createElement("h4");
-            const inte = document.createElement("h6");
-            const des = document.createElement("p");
-            const btn = document.createElement("button");
-            divp.className = "card ideas text-center w-50 mt-5 mb-5";
-            divhp.className = "card-body";
-            nombre.className = "card-title";
-            inte.className = "card-subtitle mb-2 text-muted"
-            des.className = "card-text"
-            btn.className = "btn btn-outline-dark m-2";
-            btn.textContent = "IR";
-            btn.type = "submit";
-            btn.name = "id"
-            btn.value = `${res[i].id_iniciativa}`
-            nombre.textContent = res[i].in_nombre;
-            des.textContent = res[i].in_texto.slice(0,600)+"...";
-            //inte.textContent = "aqui van los integrantes"
-            divhp.appendChild(nombre);
-            //for (let i = 0; i < u.length; i++) {
-            //  const nombres = document.getElementById("nombres")
-            //  const p = document.createElement("p")
-            //  p.textContent= `${u[i].us_nombres} ${u[i].us_apellidos}`
-            //  nombres.appendChild(p)
-            //}
-            divhp.appendChild(inte);
-            divhp.appendChild(des);
-            divp.appendChild(divhp);
-            divp.appendChild(btn);
-            parent.appendChild(divp);
+            const parent = document.getElementById("table");
+            tb = document.createElement("tbody")
+            tr = document.createElement("tr")
+            tdid = document.createElement("td")
+            tduser = document.createElement("td")
+            tdnom = document.createElement("td")
+            tdap = document.createElement("td")
+            tdema = document.createElement("td")
+            tdborrar = document.createElement("td")
+            tdid.textContent=`${res[i].id_usuario}`
+            tduser.textContent=res[i].us_nickname
+            tdnom.textContent=res[i].us_nombres
+            tdap.textContent=res[i].us_apellidos
+            tdema.textContent=res[i].us_correo
+            btn = document.createElement("button")
+            btn.textContent="X"
+            btn.type="submit"
+            tdborrar.appendChild(btn)
+            tr.appendChild(tdid)
+            tr.appendChild(tduser)
+            tr.appendChild(tdnom)
+            tr.appendChild(tdap)
+            tr.appendChild(tdema)
+            tr.appendChild(tdborrar)
+            tb.appendChild(tr)
+            parent.appendChild(tb);
         }
     </script>
-
-    <% if(typeof alert != "undefined") { %>
-        <script>
-            Swal.fire({
-                title: `<%= alertTitle %>`,
-                text: `<%= alertMessage %>`,
-                icon: `<%= alertIcon %>`,
-                showConfirmButton: <%= showConfirmButton %>,
-                timer: <%= timer %>
-    
-            })
-        </script>
-        <% } %>
 </body>
 </html>

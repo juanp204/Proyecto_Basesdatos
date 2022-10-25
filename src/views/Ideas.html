@@ -107,6 +107,7 @@
         <div>
             <h2 id="nom_equip" class="mt-5">Nombre de equipo</h2>
             <div class="m-4" id="nombres"></div>
+            <label>Cailicacion : <%= cal %></label>
             <p id="desc">descripcion</p>
         </div>
         <div class="mb-5 mt-5">
@@ -116,19 +117,27 @@
 
         <hr>
     </div>
-    <div class="m-2 comentarios">
-      <form action="/comentar">
+    <div class="m-2 comentarios" style="float: left;">
+      <form action="" method="get">
         <label for="exampleTextarea" class="form-label mt-4">Comentarios</label>
-        <textarea class="form-control m-5" id="exampleTextarea" rows="3" style="height: 60px;"></textarea>
+        <textarea class="form-control m-5" id="comentario" name="comentario" rows="3" style="height: 60px;"></textarea>
         <label for="exampleTextarea" class="form-label mt-4">Calificar</label>
-        <input type="range" class="form-range" id="customRange1">
+        <input type="range" class="form-range" id="califica" name="califica" min="0" max="10">
         <button style="margin-left: 10px;" class="btn btn-secondary my-2 my-sm-0 m-2" type="submit">Publicar</button>
       </form>
       <hr>
+
+      <div id="comentarios">
+        Comentarios :
+      </div>
+
+
     </div>
     <script>
+      
       const res = JSON.parse(decodeEntities('<%= res %>').replace(new RegExp('\r?\n','g'), '<br />'))
       const u = JSON.parse(decodeEntities('<%= conu %>'))
+      const com = JSON.parse(decodeEntities('<%= com %>'))
       console.log(res)
       console.log(u)
       document.getElementById("nom_equip").textContent=res[0].in_nombre
@@ -142,6 +151,32 @@
       console.log(res[0].in_texto)
       document.getElementById("pdf").setAttribute("src",`/pdffiles/${res[0].id_iniciativa}.pdf`)
       document.getElementById("video").setAttribute("src",`https://www.youtube.com/embed/${res[0].in_video}`)
+      console.log(com)
+      for (let i = 0; i < com.length; i++){
+        const parent = document.getElementById("comentarios")
+        const div = document.createElement("div")
+        div.className = "m-5"
+        div.style = "border: solid 1px black;"
+        const h6 = document.createElement("h6")
+        h6.textContent = com[i].us_nombres
+        const label = document.createElement("label")
+        label.textContent = com[i].pu_comentario
+        div.appendChild(h6)
+        div.appendChild(label)
+        parent.appendChild(div)
+      }
     </script>
+    <% if(typeof alert != "undefined" && alert) { %>
+      <script>
+          Swal.fire({
+              title: `<%= alertTitle %>`,
+              text: `<%= alertMessage %>`,
+              icon: `<%= alertIcon %>`,
+              showConfirmButton: <%= showConfirmButton %>,
+              timer: <%= timer %>
+  
+          })
+      </script>
+      <% } %>
 </body>
 </html>
