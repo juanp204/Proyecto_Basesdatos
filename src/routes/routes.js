@@ -81,6 +81,21 @@ router.get('/init', async (req, res) => {
 
 });
 
+router.get('/editarperfil', async (req, res) => {
+    conectado.query("SELECT us_nickname,us_nombres,us_apellidos,us_fecha_nacimiento,us_correo,us_id_uni,us_universidad,us_facultad,us_semestre FROM usuario WHERE us_nickname = ?",[req.session.user], async (error, results)=>{
+        const user = req.session.user
+        const id = req.session.tipeuser
+        //const
+        if(results.length==0){
+            res.redirect('/')
+        }
+        else{
+            const con = `${JSON.stringify(results)}`;
+            res.render(path.join(route,'views/editarperfil.html'), {res: con, us: user, id: id});
+        }
+    })
+});
+
 router.get('/coordinador', async (req, res) => {
     const user = req.session.user
     const id = req.session.tipeuser
@@ -268,6 +283,8 @@ router.get('/cerrar', async (req, res) => {
 });
 
 router.post('/auth', async (req, res)=>{
+    const users = req.session.user
+    const id = req.session.tipeuser
     const user = req.body.user;
     const pass = req.body.pass;
     console.log(user)
@@ -276,6 +293,8 @@ router.post('/auth', async (req, res)=>{
             console.log(results)
             if(error || results.length == 0 || pass!=results[0].us_pass){
                 res.render(path.join(route,'views/init.html'),{
+                    us: users,
+                    id: id,
                     alert:true,
                     alertTitle:"Error",
                     alertMessage: "Usuario y/o password incorrecta",
@@ -295,6 +314,8 @@ router.post('/auth', async (req, res)=>{
     }
     else{
         res.render(path.join(route,'views/init.html'),{
+            us: users,
+            id: id,
             alert:true,
             alertTitle:"Error",
             alertMessage: "Campos vacios",

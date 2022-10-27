@@ -1,16 +1,16 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
-    <link rel="stylesheet" href="/Coordinador.css">
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
-    <script src="/decodehtml.js"></script>
     <link rel="stylesheet" href="/bootstrap.css">
     <link rel="stylesheet" href="/bootstrap.min.css">
     <link rel="stylesheet" href="/estilos.css">
-    <title>Coordinador</title>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
+    <script src="/decodehtml.js"></script>
+    <title>Document</title>
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
@@ -33,7 +33,7 @@
                 <% } %>
                   <%if(id == 5) { %>
                     <li class="nav-item">
-                      <a class="nav-link" href="#">Usuarios</a>
+                      <a class="nav-link" href="/coordinador">Usuarios</a>
                     </li>
                     <li class="nav-item">
                       <a class="nav-link" href="#">Iniciativas</a>
@@ -104,82 +104,52 @@
         </div>
     </nav>
 
-    <h2>Responsive Table</h2>
-    <div class="table-wrapper">
-      <form action="">
-        <table class="fl-table" id="table">
-          <thead>
-            <tr>
-                <th>ID</th>
-                <th>Nombre idea</th>
-                <th>Nombres</th>
-                <th>Apellidos</th>
-                <th>E-mail</th>
-                <th>Borrar</th>
-            </tr>
-            </thead>
-        </table>
-      </form>
-    </div>
-
-    <div class="pag">
-        <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
-            <form action="" method="">
-                <div class="btn-group me-2" id="from_pag" role="group" aria-label="First group">
-                </div>
-            </form>
+    <div class="m-5">
+        <h2 id="nombres">nombres</h2> <br>
+        <div class="ideas w-50 mb-3 form-group">
+            <label class="col-form-label mt-4" id="nickname" for="innickname">Default input</label>
+            <input type="text" class="form-control" placeholder="Nuevo nickname" id="innickname" name="nickname">
           </div>
-
-      </div>
-    
-    <script>
-        for (var i = 1; i < <%= pag %>+1 ; i=i+4){
-            const parent = document.getElementById('from_pag');
-            const btn = document.createElement("button");
-
-            btn.type ="submit";
-            btn.className="btn btn-secondary";
-            if(i==1){btn.textContent="<<";}
-            else{btn.textContent=">>"}
-            btn.value=i;
-            btn.name="pag"
-            
-            parent.appendChild(btn);
-        }
-    </script>
-
+        <div class="ideas w-50 mb-3 form-group">
+            <label class="col-form-label mt-4" id="fecha">Default input</label>
+        </div>
+        <div class="ideas w-50 form-group">
+            <label class="col-form-label mt-4" id="email" for="inemail">Default input</label>
+            <input type="email" class="form-control" placeholder="Nueva Email" id="inemail" name="email">
+        </div>
+    </div>
+    <hr>
+    <div class="m-5">
+        <label >Estudiante:</label><br>
+        <div class="ideas w-50 form-group">
+            <label class="col-form-label mt-4" id="id_u" for="inid_u">ID Universidad</label>
+            <input type="text" class="form-control" placeholder="ID Universidad" id="inid_u" name="">
+        </div>
+        <div class="ideas w-50 form-group">
+            <label class="col-form-label mt-4" id="facul" for="infacul">Default input</label>
+            <input type="text" class="form-control" placeholder="Default input" id="infacul">
+        </div>
+        <label id="facul">Facultad: no es estudiante</label><br>
+        <label id="semes">semestre: no es estudiante</label><br>
+        <label id="prom">Promedio: no es estudiante</label>
+    </div>
+    <hr>
     <script>
         const res = JSON.parse(decodeEntities('<%= res %>').replace(new RegExp('\r?\n','g'), ' '))
-        console.log(res)
-        for (var i = 0; i <=4; i++){
-            console.log(i)
-            const parent = document.getElementById("table");
-            tb = document.createElement("tbody")
-            tr = document.createElement("tr")
-            tdid = document.createElement("td")
-            tduser = document.createElement("td")
-            tdnom = document.createElement("td")
-            tdap = document.createElement("td")
-            tdema = document.createElement("td")
-            tdborrar = document.createElement("td")
-            tdid.textContent=`${res[i].id_usuario}`
-            tduser.textContent=res[i].us_nickname
-            tdnom.textContent=res[i].us_nombres
-            tdap.textContent=res[i].us_apellidos
-            tdema.textContent=res[i].us_correo
-            btn = document.createElement("button")
-            btn.textContent="X"
-            btn.type="submit"
-            tdborrar.appendChild(btn)
-            tr.appendChild(tdid)
-            tr.appendChild(tduser)
-            tr.appendChild(tdnom)
-            tr.appendChild(tdap)
-            tr.appendChild(tdema)
-            tr.appendChild(tdborrar)
-            tb.appendChild(tr)
-            parent.appendChild(tb);
+        document.getElementById("nombres").textContent = `${res[0].us_nombres} ${res[0].us_apellidos}`
+        document.getElementById("nickname").textContent = `${res[0].us_nickname}`
+        document.getElementById("fecha").textContent = `fecha de nacimiento:` + ` ${res[0].us_fecha_nacimiento}`.slice(0,11)
+        document.getElementById("email").textContent = `correo: ${res[0].us_correo}`
+
+        if(res[0].us_id_uni != null){
+          document.getElementById("id_u").textContent = `Id universidad: ${res[0].us_id_uni}`
+          document.getElementById("facul").textContent = `Facultad: ${res[0].us_facultad}`
+          document.getElementById("semes").textContent = `semestre: ${res[0].us_semestre}`
+          document.getElementById("prom").textContent = `promedio: ${res[0].us_promedio}`
         }
+
     </script>
+
+
 </body>
 </html>
